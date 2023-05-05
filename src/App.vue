@@ -1,7 +1,7 @@
 <template>
-  <div class="h-screen bg-slate-900 p-20">
+  <div class="bg-slate-900 pt-10 px-[20%]">
     <div
-      class="border bg-slate-500 max-w-"
+      class="rounded-xl bg-slate-500 max-w-"
     >
       <div v-if="!loggedIn">
         <input 
@@ -22,15 +22,31 @@
       </div>
 
     </div>
-
+    <div
+      v-for="thing in entries"
+    >
+      <div class="bg-slate-100"> {{ thing.test + " " + thing.test2 }}</div>
+    </div>
+    <ReviewForm 
+      :db = db
+      :user = this.auth.currentUser
+      restaurant_name="Testaurant"
+    />
+    <ReviewBrowser
+      :db = db
+      restaurant_name="Testaurant"
+    />
   </div>
 </template>
 
 <script>
 import { initializeApp } from "firebase/app";
-import { collection, doc, setDoc, getFirestore } from 'firebase/firestore';
+import { collection, query, doc, getDocs, setDoc, addDoc, getFirestore } from 'firebase/firestore';
 import {getAuth, signOut, signInWithEmailAndPassword , onAuthStateChanged} from "firebase/auth";
+import ReviewForm from "./components/ReviewForm.vue";
+import ReviewBrowser from "./components/ReviewBrowser.vue";
 export default {
+  components: { ReviewForm, ReviewBrowser },
   data() {
     return {
       email: "",
@@ -38,10 +54,22 @@ export default {
       auth: "",
       user: "",
       loggedIn: false,
+      restRefs: "",
+      db: undefined,
+      app: undefined,
+      entries: undefined,
     }
   },
   created() {
-    const firebaseConfig = {
+    this.authenticate();
+    this.db = getFirestore();
+    
+
+
+  },
+  methods: {
+    authenticate() {
+      const firebaseConfig = {
       apiKey: "AIzaSyALV08bfPkleXurrp4q-ZZqLB1buSChfhU",
       authDomain: "restlist-ab369.firebaseapp.com",
       projectId: "restlist-ab369",
@@ -50,22 +78,34 @@ export default {
       appId: "1:1032725124554:web:304b9b702ca638157aab33",
       measurementId: "G-7FGCH3NTKT"
     };
-    const app = initializeApp(firebaseConfig);
-
+    this.app = initializeApp(firebaseConfig);
     this.auth = getAuth();
+
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
-        //console.log("Signed in");
         this.loggedIn = true;
         const uid = user.uid;
       } else {
-        //console.log("Signed out");
         this.loggedIn = false;
       }
     });
+    },
 
-  },
-  methods: {
+
+
+
+      //setDoc(doc(this.db, `/restaurants/${restaurant_name}/Reviews`, "newRev"), data, { merge: true});
+
+      // this.restRefs = collection(this.db, "/restaurants/Testaurant/Reviews");
+      // console.log(this.restRefs)
+      // const q = query(this.restRefs, );
+      // const querySnapshot = await getDocs(q);
+      // console.log(querySnapshot);
+      // querySnapshot.forEach((doc) => {
+      //   console.log(doc.id, " => ", doc.data());
+      // });
+      //await setDoc(doc(this.restRefs, "Testaurant"), {
+      //reviews: [{ stars: 10, service: 8}] });
     logIn() {
       signInWithEmailAndPassword(this.auth, this.email, this.password)
           .then((userCredential) => {
@@ -86,49 +126,4 @@ export default {
 
   }
 }
-// Import the functions you need from the SDKs you need
-
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
-
-// Initialize Firebase
-
-
-
-console.log("hello?");
-
-
-
-
-// async function setCities() {
-//   console.log("Pressed");
-//   const db = getFirestore(app);
-//   const citiesRef = collection(db, "cities");
-
-//   await setDoc(doc(citiesRef, "SF"), {
-//       name: "Sanaggo", state: "CA", country: "USA",
-//       capital: false, population: 860000,
-//       regions: ["west_coast", "norcal"] });
-//   await setDoc(doc(citiesRef, "LA"), {
-//       name: "Loseles", state: "CA", country: "USA",
-//       capital: false, population: 3900000,
-//       regions: ["west_coast", "socal"] });
-//   await setDoc(doc(citiesRef, "DC"), {
-//       name: "Washington, D.C.", state: null, country: "USA",
-//       capital: true, population: 680000,
-//       regions: ["east_coast"] });
-//   await setDoc(doc(citiesRef, "TOK"), {
-//       name: "Tokyo", state: null, country: "Japan",
-//       capital: true, population: 9000000,
-//       regions: ["kanto", "honshu"] });
-//   await setDoc(doc(citiesRef, "BJ"), {
-//       name: "Beijing", state: null, country: "China",
-//       capital: true, population: 21500000,
-//       regions: ["jingjinji", "hebei"] });
-// }
 </script>
