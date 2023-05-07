@@ -137,7 +137,6 @@ export default {
             this.environment_notes = "",
             this.general_notes = "",
             this.showForm = false,
-            this.restaurant_name = undefined,
             //
             this.showForm = true;
         },
@@ -155,7 +154,7 @@ export default {
 
         async addEntry() {
             if (!this.isValidInput()) {return;}
-
+            console.log(this.restaurant_name);
             const review_data = {
                 Taste: { rating: this.taste_rating, notes: this.taste_notes},
                 Service: { rating: this.service_rating, notes: this.service_notes},
