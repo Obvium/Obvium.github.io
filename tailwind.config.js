@@ -12,6 +12,7 @@ module.exports = {
         'widged-bg': "#27272a",
         'medium': "#52525b",
         'bright': "#71717a",
+        'slightly-brighter': "#868691",
         'dark': "#27272a",
         
       },

@@ -1,24 +1,27 @@
 <template>
-  <div class="min-h-screen bg-base-bg pt-10 px-[5%]">
-    <LoginWidged
-      :loggedIn = "loggedIn"
-      :user = user
-      @login="logIn($event)"
-      @logout="logOut()"
-    />
-    <AddRestaurant
-      v-if="loggedIn"
-      :db = db
-    />
-    <ReviewForm 
-      v-if="loggedIn"
-      :db = db
-      :user = this.auth.currentUser
-    />
-    <ReviewBrowser
-      v-if="loggedIn"
-      :db = db
-    />
+  <div class="min-h-screen bg-base-bg pt-10 px-[2%]">
+    <div class="w-full grid items-start gap-5 lg:grid-cols-2">
+      <LoginWidged
+        :loggedIn = "loggedIn"
+        :user = user
+        @login="logIn($event)"
+        @logout="logOut()"
+      />
+      <AddRestaurant
+        v-if="loggedIn"
+        :db = db
+      />
+      <ReviewForm 
+        v-if="loggedIn"
+        :db = db
+        :user = this.auth.currentUser
+      />
+      <ReviewBrowser
+        v-if="loggedIn"
+        :db = db
+      />
+    </div>
+
   </div>
 </template>
 

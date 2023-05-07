@@ -1,19 +1,24 @@
 <template>
-    <div class="border-2 border-bright mt-5 p-2 rounded-xl bg-widged-bg">
-        <div class="p-1 mb-2 text-xl rounded-xl text-dark text-center font-bold bg-bright">
+    <div class="p-2 border-2 border-bright rounded-xl bg-widged-bg">
+        <div 
+            class="p-1 text-xl rounded-lg text-dark text-center font-bold bg-bright hover:bg-slightly-brighter"
+            @click="active = !active"
+        >
             add new Restaurant
         </div>
-        <input 
-            class="mb-2 ml-5 p-1 rounded bg-medium border border-bright w-[calc(100%-2.5rem)] font-bold"
+        <div v-show="active">
+            <input 
+            class="my-2 ml-5 p-1 rounded bg-medium border border-bright w-[calc(100%-2.5rem)] font-bold truncate"
             v-model="name" 
             placeholder="Name"
           />     
           <input 
-            class="mb-2 ml-5 p-1 rounded bg-medium border border-bright w-[calc(100%-2.5rem)]"  
+            class="mb-2 ml-5 p-1 rounded bg-medium border border-bright w-[calc(100%-2.5rem)] "  
             v-model="location" 
             placeholder="Location" 
           />
-          <button class="p-1 ml-[35%] w-[calc(30%)] rounded-lg bg-button-bg hover:bg-button-hover font-bold truncate" @click= addRestaurant()>add</button>
+          <button class="p-1 ml-[35%] w-[30%] rounded-lg bg-button-bg hover:bg-button-hover font-bold truncate" @click= addRestaurant()>add</button>
+        </div>
     </div>
 </template>
 <script>
@@ -27,6 +32,7 @@ export default {
         return {
             name: undefined,
             location: undefined,
+            active: false,
         }
         
     },

@@ -1,98 +1,100 @@
 <template>
-    <div class="border-2 border-bright mt-5 p-2 rounded-xl bg-widged-bg">
-        <div class="p-1 mb-2 text-xl rounded-xl text-dark text-center font-bold bg-bright">
+    <div class="p-2 border-2 border-bright rounded-xl bg-widged-bg">
+        <div 
+            class="p-1 text-xl rounded-lg text-dark text-center font-bold bg-bright hover:bg-slightly-brighter"
+            @click="active = !active"
+            >
             add new Review
         </div>
-        <DropDown
-            :db = db
-            @selected="resetReviewForm($event)"
-        />
-        <Transition
-            enter-active-class="duration-300"
-            enter-from-class="transform opacity-0 scale-0"
-            enter-to-class="scale-100 opacity-100"
-            leave-active-class="duration-300"
-            leave-from-class="scale-100 opacity-100"
-            leave-to-class="transform opacity-0 scale-0"
-        >
-            <div class="mx-10" v-if="showForm">
-                <div class="flex w-full m-2 text-bright font-bold">
-                    <div class="w-1/3"> </div>
-                    <div class="w-1/12 mx-2 text-center">R</div>
-                    <div class="w-full px-3">Notes</div>
-                </div>
-                <div class="flex w-full m-2">
-                    <div class="w-1/3 text-bright font-bold">
-                        Taste
+            <div class="mt-2" v-show="active">
+                <DropDown
+                :db = db
+                @selected="resetReviewForm($event)"
+            />
+            <Transition
+                enter-active-class="duration-300"
+                enter-from-class="transform opacity-0 scale-0"
+                enter-to-class="scale-100 opacity-100"
+                leave-active-class="duration-300"
+                leave-from-class="scale-100 opacity-100"
+                leave-to-class="transform opacity-0 scale-0"
+            >
+                <div class="mx-10" v-if="showForm">
+                    <div class="flex w-full m-2 text-bright font-bold">
+                        <div class="w-1/3"> </div>
+                        <div class="w-1/12 mx-2 text-center">R</div>
+                        <div class="w-full px-3">Notes</div>
                     </div>
-                    <input
-                        class="w-1/12 mx-2 rounded bg-bright text-center text-dark"
-                        :class="[ /^\+?(0|[1-9]\d*)$/.test(this.taste_rating) ? '' : 'border border-invalid-button-bg']"
-                        v-model="taste_rating" 
-                    /> 
-                    <input
-                        class="w-full rounded bg-bright px-3 py-1 text-dark"
-                        v-model="taste_notes" 
-                    /> 
-                </div>
-                <div class="flex w-full m-2">
-                    <div class="w-1/3 text-bright font-bold">
-                        Service
+                    <div class="flex w-full m-2">
+                        <div class="w-1/3 text-bright font-bold">
+                            Taste
+                        </div>
+                        <input
+                            class="w-1/12 mx-2 rounded bg-bright text-center text-dark"
+                            :class="[ /^\+?(0|[1-9]\d*)$/.test(this.taste_rating) ? '' : 'border border-invalid-button-bg']"
+                            v-model="taste_rating" 
+                        /> 
+                        <input
+                            class="w-full rounded bg-bright px-3 py-1 text-dark"
+                            v-model="taste_notes" 
+                        /> 
                     </div>
-                    <input 
-                        class="w-1/12 mx-2 rounded bg-bright text-center text-dark"
-                        :class="[ /^\+?(0|[1-9]\d*)$/.test(this.service_rating) ? '' : 'border border-invalid-button-bg']" 
-                        v-model="service_rating" 
-                    /> 
-                    <input
-                        class="w-full rounded bg-bright px-3 py-1 text-dark"
-                        v-model="service_notes" 
-                    /> 
-                </div>
-                <div class="flex w-full m-2">
-                    <div class="w-1/3 text-bright font-bold">
-                        Price
+                    <div class="flex w-full m-2">
+                        <div class="w-1/3 text-bright font-bold">
+                            Service
+                        </div>
+                        <input 
+                            class="w-1/12 mx-2 rounded bg-bright text-center text-dark"
+                            :class="[ /^\+?(0|[1-9]\d*)$/.test(this.service_rating) ? '' : 'border border-invalid-button-bg']" 
+                            v-model="service_rating" 
+                        /> 
+                        <input
+                            class="w-full rounded bg-bright px-3 py-1 text-dark"
+                            v-model="service_notes" 
+                        /> 
                     </div>
-                    <input 
-                        class="w-1/12 mx-2 rounded bg-bright text-center text-dark"
-                        :class="[ /^\+?(0|[1-9]\d*)$/.test(this.price_rating) ? '' : 'border border-invalid-button-bg']"
-                        v-model="price_rating" 
-                    /> 
-                    <input
-                        class="w-full rounded bg-bright px-3 py-1 text-dark"
-                        v-model="price_notes" 
-                    /> 
-                </div>
-                <div class="flex w-full m-2">
-                    <div class="w-1/3 text-bright font-bold">
-                        Environment
+                    <div class="flex w-full m-2">
+                        <div class="w-1/3 text-bright font-bold">
+                            Price
+                        </div>
+                        <input 
+                            class="w-1/12 mx-2 rounded bg-bright text-center text-dark"
+                            :class="[ /^\+?(0|[1-9]\d*)$/.test(this.price_rating) ? '' : 'border border-invalid-button-bg']"
+                            v-model="price_rating" 
+                        /> 
+                        <input
+                            class="w-full rounded bg-bright px-3 py-1 text-dark"
+                            v-model="price_notes" 
+                        /> 
                     </div>
-                    <input 
-                        class="w-1/12 mx-2 rounded bg-bright text-center text-dark"
-                        :class="[ /^\+?(0|[1-9]\d*)$/.test(this.environment_rating) ? '' : 'border border-invalid-button-bg']"
-                        v-model="environment_rating" 
-                    /> 
-                    <input
-                        class="w-full rounded bg-bright px-3 py-1 text-dark"
-                        v-model="environment_notes" 
-                    /> 
+                    <div class="flex w-full m-2">
+                        <div class="w-1/3 text-bright font-bold">
+                            Environment
+                        </div>
+                        <input 
+                            class="w-1/12 mx-2 rounded bg-bright text-center text-dark"
+                            :class="[ /^\+?(0|[1-9]\d*)$/.test(this.environment_rating) ? '' : 'border border-invalid-button-bg']"
+                            v-model="environment_rating" 
+                        /> 
+                        <input
+                            class="w-full rounded bg-bright px-3 py-1 text-dark"
+                            v-model="environment_notes" 
+                        /> 
+                    </div>
+                    <div class="mb-2 text-bright font-bold">
+                        <div class="mb-1"> General Notes: </div>
+                        <input
+                            class="w-full text-dark rounded bg-bright px-3 py-1"
+                            v-model="general_notes" 
+                        /> 
+                    </div>
+                    <button 
+                        class="p-1 ml-[35%] w-[calc(30%)] rounded-lg font-bold truncate" 
+                        :class="[ isValidInput() ? 'bg-button-bg hover:bg-button-hover' : 'bg-invalid-button-bg']"
+                        @click= addEntry()>add Entry</button>
                 </div>
-                <div class="mb-2 text-bright font-bold">
-                    <div class="mb-1"> General Notes: </div>
-                    <input
-                        class="w-full text-dark rounded bg-bright px-3 py-1"
-                        v-model="general_notes" 
-                    /> 
-                </div>
-                <button 
-                    class="p-1 ml-[35%] w-[calc(30%)] rounded-lg font-bold truncate" 
-                    :class="[ isValidInput() ? 'bg-button-bg hover:bg-button-hover' : 'bg-invalid-button-bg']"
-                    @click= addEntry()>add Entry</button>
-            </div>
-            
-        </Transition>
-
-        
+            </Transition>
+        </div>
     </div>
 </template>
 
@@ -108,6 +110,7 @@ export default {
     ],
     data() {
         return {
+            active: false,
             taste_rating: undefined,
             taste_notes: "",
             service_rating: undefined,
