@@ -1,83 +1,88 @@
 <template>
-    <div class="border mt-5 py-3 rounded-xl bg-slate-600 ">
-        <div class="p-1 text-xl rounded-xl text-slate-800 text-center font-bold bg-slate-500 mx-[2%]">
-            Reviews for {{ restaurant_name }}
+    <div class="border-2 border-bright mt-5 p-2 rounded-xl bg-widged-bg">
+        <div class="p-1 mb-2 text-xl rounded-xl text-dark text-center font-bold bg-bright">
+            Reviews
         </div>
+        <DropDown
+            class="mb-10"
+            :db = db
+            @selected="getReviews($event)"
+        />
         <div
-            class="m-3"
+            class="mx-10 mb-5"
             v-for="doc in this.reviews"      
         > 
-            <div class="m-5 py-3 bg-slate-400 rounded-xl">
-                <div class="p-1 mb-5 text-xl rounded-xl text-slate-800 text-center font-bold bg-slate-500 mx-[2%]">
+            <div class="mb-2">
+                <div class="p-1 mb-5 text-xl rounded-xl text-dark text-center font-bold bg-bright">
                     Review created by {{ doc.data()["User"] }}
                 </div>
-                <div class="mx-10">
+                <div class="">
                     <div class="flex w-full m-2">
-                        <div class="w-1/5">
+                        <div class="w-1/5 text-bright font-bold">
                             Taste
                         </div>
                         <div
-                            class="w-1/12 mx-2 rounded bg-slate-700 text-center" 
+                            class="w-1/12 mx-2 rounded bg-bright text-center text-dark" 
                         >        
                         {{ doc.data()["Taste"]["rating"] }}          
                         </div> 
                         <div
-                            class="w-[50%] rounded bg-slate-700 px-3 py-1"
+                            class="w-[50%] rounded bg-bright px-3 py-1 text-dark"
                         >
                         {{ doc.data()["Taste"]["notes"] }}     
                         </div>
                     </div>
                     <div class="flex w-full m-2">
-                        <div class="w-1/5">
+                        <div class="w-1/5 text-bright font-bold">
                             Service
                         </div>
                         <div
-                            class="w-1/12 mx-2 rounded bg-slate-700 text-center" 
+                            class="w-1/12 mx-2 rounded bg-bright text-center text-dark" 
                         >        
                         {{ doc.data()["Service"]["rating"] }}          
                         </div> 
                         <div
-                            class="w-[50%] rounded bg-slate-700 px-3 py-1"
+                            class="w-[50%] rounded bg-bright px-3 py-1 text-dark"
                         >
                         {{ doc.data()["Service"]["notes"] }}     
                         </div> 
                     </div>
                     <div class="flex w-full m-2"> 
-                        <div class="w-1/5">
+                        <div class="w-1/5 text-bright font-bold">
                             Price
                         </div>
                         <div
-                            class="w-1/12 mx-2 rounded bg-slate-700 text-center" 
+                            class="w-1/12 mx-2 rounded bg-bright text-center text-dark" 
                         >        
                         {{ doc.data()["Price"]["rating"] }}          
                         </div> 
                         <div
-                            class="w-[50%] rounded bg-slate-700 px-3 py-1"
+                            class="w-[50%] rounded bg-bright px-3 py-1 text-dark"
                         >
                         {{ doc.data()["Price"]["notes"] }}     
                         </div> 
                     </div>
                     <div class="flex w-full m-2">
-                        <div class="w-1/5">
+                        <div class="w-1/5 text-bright font-bold">
                             Environment
                         </div>
                         <div
-                            class="w-1/12 mx-2 rounded bg-slate-700 text-center" 
+                            class="w-1/12 mx-2 rounded bg-bright text-center text-dark" 
                         >        
                         {{ doc.data()["Environment"]["rating"] }}          
                         </div> 
                         <div
-                            class="w-[50%] rounded bg-slate-700 px-3 py-1"
+                            class="w-[50%] rounded bg-bright px-3 py-1 text-dark"
                         >
                         {{ doc.data()["Environment"]["notes"] }}     
                         </div> 
                     </div>
                 </div>
-                <div class="m-5 text-slate-900 font-bold">
+                <div class="mx-2 mb-2 text-bright font-bold">
                     <div class="mb-1">
                         General Notes:
                     </div>
-                    <div  class="w-full rounded text-slate-100 bg-slate-700 px-3 py-1">
+                    <div  class="w-full rounded bg-bright px-3 py-1 text-dark">
                         {{ doc.data()["GeneralNotes"] }}
                     </div>
                 </div>
@@ -89,25 +94,27 @@
 <script>
 import { query, getDocs } from 'firebase/firestore';
 import { collection } from 'firebase/firestore';
+import DropDown from './DropDown.vue'
 
 export default {
+    components: { DropDown },
     props: [
         'db',
-        'restaurant_name'
     ],
     data() {
         return {
+            restaurant_name: undefined,
             reviews: [],
         }
         
     },
     created() {
-        this.getReviews();
     },
     methods: {
         //This needs to be a util function
-        async getReviews() {
-            const reviewRefs =  collection(this.db, `/restaurants/${this.restaurant_name}/Reviews`);
+        async getReviews(restaurant_name) {
+            this.reviews = []
+            const reviewRefs =  collection(this.db, `/restaurants/${restaurant_name}/Reviews`);
             const q = query(reviewRefs);
             const reviewDocs = await getDocs(q);
             reviewDocs.forEach((doc) => {

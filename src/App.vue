@@ -1,40 +1,23 @@
 <template>
-  <div class="bg-slate-900 pt-10 px-[20%]">
-    <div
-      class="rounded-xl bg-slate-500 max-w-"
-    >
-      <div v-if="!loggedIn">
-        <input 
-          class="mt-3 ml-5 rounded bg-slate-100 border w-[calc(100%-2.5rem)] font-bold"
-          v-model="email" 
-          placeholder="E-Mail"
-        />     
-        <input 
-          class="ml-5 mt-1 rounded bg-slate-100 border w-[calc(100%-2.5rem)]"  
-          type="password" 
-          v-model="password" 
-          placeholder="Password" 
-        />
-      </div>
-      <div class="flex ">
-        <button v-if="!loggedIn" class="p-1 mx-[30%] my-3 w-full rounded-xl bg-slate-100" @click= logIn()>Log In</button>
-        <button v-if="loggedIn" class="p-1 mx-[30%] my-3 w-full rounded-xl bg-slate-100" @click= logOut()>Log Out</button>
-      </div>
-
-    </div>
-    <div
-      v-for="thing in entries"
-    >
-      <div class="bg-slate-100"> {{ thing.test + " " + thing.test2 }}</div>
-    </div>
+  <div class="min-h-screen bg-base-bg pt-10 px-[5%]">
+    <LoginWidged
+      :loggedIn = "loggedIn"
+      :user = user
+      @login="logIn($event)"
+      @logout="logOut()"
+    />
+    <AddRestaurant
+      v-if="loggedIn"
+      :db = db
+    />
     <ReviewForm 
+      v-if="loggedIn"
       :db = db
       :user = this.auth.currentUser
-      restaurant_name="Testaurant"
     />
     <ReviewBrowser
+      v-if="loggedIn"
       :db = db
-      restaurant_name="Testaurant"
     />
   </div>
 </template>
@@ -45,8 +28,11 @@ import { collection, query, doc, getDocs, setDoc, addDoc, getFirestore } from 'f
 import {getAuth, signOut, signInWithEmailAndPassword , onAuthStateChanged} from "firebase/auth";
 import ReviewForm from "./components/ReviewForm.vue";
 import ReviewBrowser from "./components/ReviewBrowser.vue";
+import LoginWidged from "./components/LoginWidged.vue";
+import AddRestaurant from "./components/AddRestaurant.vue"
+
 export default {
-  components: { ReviewForm, ReviewBrowser },
+  components: { ReviewForm, ReviewBrowser, LoginWidged, AddRestaurant},
   data() {
     return {
       email: "",
@@ -83,6 +69,7 @@ export default {
 
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
+        this.user = user;
         this.loggedIn = true;
         const uid = user.uid;
       } else {
@@ -91,23 +78,8 @@ export default {
     });
     },
 
-
-
-
-      //setDoc(doc(this.db, `/restaurants/${restaurant_name}/Reviews`, "newRev"), data, { merge: true});
-
-      // this.restRefs = collection(this.db, "/restaurants/Testaurant/Reviews");
-      // console.log(this.restRefs)
-      // const q = query(this.restRefs, );
-      // const querySnapshot = await getDocs(q);
-      // console.log(querySnapshot);
-      // querySnapshot.forEach((doc) => {
-      //   console.log(doc.id, " => ", doc.data());
-      // });
-      //await setDoc(doc(this.restRefs, "Testaurant"), {
-      //reviews: [{ stars: 10, service: 8}] });
-    logIn() {
-      signInWithEmailAndPassword(this.auth, this.email, this.password)
+    async logIn(cred) {
+      await signInWithEmailAndPassword(this.auth, cred[0], cred[1])
           .then((userCredential) => {
             this.user = userCredential.user;
           })
@@ -115,11 +87,9 @@ export default {
             this.errorCode = error.code;
             this.errorMessage = error.message;
           });
-      console.log(this.email);
-      console.log(this.password);
     },
-    logOut() {
-      signOut(this.auth).then(() => {
+    async logOut() {
+      await signOut(this.auth).then(() => {
        }).catch((error) => {
     });
     }
