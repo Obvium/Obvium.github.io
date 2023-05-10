@@ -6,7 +6,7 @@
             >
             add new Review
         </div>
-            <div class="mt-2" v-show="active">
+            <div class="mt-2 mx-3" v-show="active">
                 <DropDown
                 :db = db
                 @selected="resetReviewForm($event)"
@@ -19,7 +19,7 @@
                 leave-from-class="scale-100 opacity-100"
                 leave-to-class="transform opacity-0 scale-0"
             >
-                <div class="mx-10" v-if="showForm">
+                <div class="mx-1" v-if="showForm">
 
                     <PointSelect
                         text="Taste"

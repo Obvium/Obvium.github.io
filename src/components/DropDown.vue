@@ -1,5 +1,5 @@
 <template>
-      <div class="relative mb-2 ml-5 p-1 w-[calc(100%-2.5rem)] rounded bg-medium border border-bright font-bold">
+      <div class="relative mb-2 p-1 w-full rounded bg-medium border border-bright font-bold">
         <button
           class="flex w-full items-center justify-between "
           @click="openMenu()"
