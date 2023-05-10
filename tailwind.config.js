@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-  //darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
       colors: {
@@ -15,6 +14,18 @@ module.exports = {
         'slightly-brighter': "#868691",
         'dark': "#27272a",
         'green': "#009933",
+        'points': {
+          1: '#E73737',
+          2: '#D54838',
+          3: '#C25838', 
+          4: '#B06939', 
+          5: '#9E793A', 
+          6: '#8B8A3A', 
+          7: '#799A3B', 
+          8: '#67AB3C', 
+          9: '#54BB3C', 
+          10: '#42CC3D',
+        }
         
       },
       gridTemplateColumns: {
